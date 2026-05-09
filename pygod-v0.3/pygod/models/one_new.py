@@ -93,13 +93,13 @@ class ONE_NEW(BaseDetector):
 
         num_nodes, in_dim = x.shape
 
-        w = torch.randn(self.hid_a, self.hid_s).half().to(self.device)
+        w = torch.randn(self.hid_a, self.hid_s).to(self.device)
 
-        u = torch.randn(num_nodes, self.hid_a).half().to(self.device)
-        v = torch.randn(self.hid_a, in_dim).half().to(self.device)
+        u = torch.randn(num_nodes, self.hid_a).to(self.device)
+        v = torch.randn(self.hid_a, in_dim).to(self.device)
 
-        g = torch.randn(num_nodes, self.hid_s).half().to(self.device)
-        h = torch.randn(self.hid_s, num_nodes).half().to(self.device)
+        g = torch.randn(num_nodes, self.hid_s).to(self.device)
+        h = torch.randn(self.hid_s, num_nodes).to(self.device)
 
         self.model = ONEBase(g, h, u, v, w, self.alpha, self.beta, self.gamma).to(self.device)
         optimizer = torch.optim.Adam(self.model.parameters(),
@@ -243,7 +243,7 @@ class ONEBase(torch.nn.Module):
         o1 = dx / torch.sum(dx)
         loss_a = torch.mean(torch.log(torch.pow(o1, -1)) * dx)
 
-        ds = torch.sum(torch.pow((s - s_).half(), 2), 1)
+        ds = torch.sum(torch.pow((s - s_).float(), 2), 1)
         o2 = ds / torch.sum(ds)
         loss_s = torch.mean(torch.log(torch.pow(o2, -1)) * ds)
 
